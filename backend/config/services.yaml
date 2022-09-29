@@ -1,0 +1,102 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    security.admin.entity: App\Entity\Admin\Admin
+    security.account.entity: App\Entity\User\User
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+
+    # controllers are imported separately to make sure services can be injected
+    # as action arguments even if you don't extend any base controller class
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: [ 'controller.service_arguments' ]
+
+    Symfony\Component\DependencyInjection\ContainerInterface: '@service_container'
+
+    app.monolog.processor.web:
+        class: App\Application\Service\Log\Web
+        arguments: ["@request_stack"]
+        tags:
+            - { name: monolog.processor, method: processRecord }
+
+    acme_api.event.authentication_failure_listener:
+        class: App\Application\EventListener\Auth\AuthenticationFailureListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_failure, method: onAuthenticationFailureResponse }
+
+    acme_api.event.authentication_success_listener:
+        class: App\Application\EventListener\Auth\AuthenticationSuccessListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: onAuthenticationSuccessResponse }
+
+    acme_api.event.jwt_notfound_listener:
+        class: App\Application\EventListener\Auth\JWTNotFoundListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_not_found, method: onJWTNotFound }
+
+    App\Application\Service\Auth\AuthService:
+        arguments:
+            - "@lexik_jwt_authentication.jwt_manager"
+            - "@gesdinet.jwtrefreshtoken.refresh_token_manager"
+            - "@gesdinet.jwtrefreshtoken.refresh_token_generator"
+            - "@validator"
+            - "%gesdinet_jwt_refresh_token.user_identity_field%"
+            - "%gesdinet_jwt_refresh_token.ttl%"
+
+    acme_api.event.jwt_created_listener:
+        class: App\Application\EventListener\Auth\JWTCreatedListener
+        arguments: [ '@request_stack' ]
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_created, method: onJWTCreated }
+
+    acme_api.event.jwt_expired_listener:
+        class: App\Application\EventListener\Auth\JWTExpiredListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_expired, method: onJWTExpired }
+
+    acme_api.event.jwt_invalid_listener:
+        class: App\Application\EventListener\Auth\JWTInvalidListener
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_jwt_invalid, method: onJWTInvalid }
+
+    gesdinet.jwtrefreshtoken.user_provider:
+        class: Gesdinet\JWTRefreshTokenBundle\Security\Provider\RefreshTokenProvider
+        arguments: [ "@gesdinet.jwtrefreshtoken.refresh_token_manager" ]
+
+    gesdinet.jwtrefreshtoken.send_token:
+        class: App\Application\EventListener\Auth\AttachRefreshTokenOnSuccessListener
+        arguments:
+            - "@gesdinet.jwtrefreshtoken.refresh_token_manager"
+            - "%gesdinet_jwt_refresh_token.ttl%"
+            - "@request_stack"
+            - "%gesdinet_jwt_refresh_token.token_parameter_name%"
+            - "%gesdinet_jwt_refresh_token.single_use%"
+            - "@gesdinet.jwtrefreshtoken.refresh_token_generator"
+            - "@gesdinet.jwtrefreshtoken.request.extractor.chain"
+            - "%gesdinet_jwt_refresh_token.cookie%"
+        tags:
+            - { name: kernel.event_listener, event: lexik_jwt_authentication.on_authentication_success, method: attachRefreshToken }
+
+    App\Application\Service\Password\PasswordHasher:
+        class: App\Application\Service\Password\PasswordHasher
+        public: true

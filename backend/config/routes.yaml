@@ -1,0 +1,14 @@
+api:
+  resource: ../src/Controller/Api
+  prefix: api
+  name_prefix: 'api.'
+  trailing_slash_on_root: true
+  type: annotation
+
+api_refresh_token:
+  path: /api/token/refresh
+
+refresh-token:
+  path: admin/token/refresh
+  defaults: { _controller: admin.jwtrefreshtoken:refresh }
+  methods: POST

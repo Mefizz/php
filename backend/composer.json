@@ -1,0 +1,115 @@
+{
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.0.0",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "aws/aws-sdk-php": "^3.208",
+        "composer/package-versions-deprecated": "1.11.99.2",
+        "doctrine/annotations": "^1.13",
+        "doctrine/doctrine-bundle": "^2.7",
+        "doctrine/doctrine-migrations-bundle": "^3.1",
+        "doctrine/orm": "^2.13",
+        "gesdinet/jwt-refresh-token-bundle": "^1.1",
+        "knplabs/knp-paginator-bundle": "^5.6",
+        "lexik/jwt-authentication-bundle": "^2.16",
+        "nelmio/cors-bundle": "^2.2",
+        "phpmailer/phpmailer": "^6.5",
+        "ramsey/uuid": "^4.2",
+        "symfony/asset": "*",
+        "symfony/console": "*",
+        "symfony/dotenv": "*",
+        "symfony/expression-language": "*",
+        "symfony/flex": "v2.1.4",
+        "symfony/form": "*",
+        "symfony/framework-bundle": "*",
+        "symfony/google-mailer": "6.0.*",
+        "symfony/http-client": "*",
+        "symfony/intl": "*",
+        "symfony/mailer": "*",
+        "symfony/mime": "*",
+        "symfony/monolog-bundle": "^3.7",
+        "symfony/notifier": "*",
+        "symfony/postmark-mailer": "*",
+        "symfony/process": "*",
+        "symfony/property-access": "*",
+        "symfony/property-info": "*",
+        "symfony/proxy-manager-bridge": "*",
+        "symfony/rate-limiter": "*",
+        "symfony/runtime": "*",
+        "symfony/security-bundle": "*",
+        "symfony/security-core": "*",
+        "symfony/security-csrf": "*",
+        "symfony/security-http": "*",
+        "symfony/sendgrid-mailer": "6.0.*",
+        "symfony/serializer": "*",
+        "symfony/string": "*",
+        "symfony/translation": "*",
+        "symfony/twig-bundle": "*",
+        "symfony/validator": "*",
+        "symfony/web-link": "*",
+        "symfony/webpack-encore-bundle": "^1.15",
+        "symfony/yaml": "*",
+        "twilio/sdk": "^6.28"
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "*",
+        "symfony/css-selector": "*",
+        "symfony/maker-bundle": "^1.0",
+        "symfony/phpunit-bridge": "*",
+        "zircote/swagger-php": "4.0.*"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "replace": {
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*"
+    },
+    "scripts": {
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        },
+        "post-install-cmd": [
+            "@auto-scripts"
+        ],
+        "post-update-cmd": [
+            "@auto-scripts"
+        ]
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": "true",
+            "require": "6.0.*",
+            "docker": true
+        }
+    }
+}

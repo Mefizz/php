@@ -1,0 +1,49 @@
+security:
+  # https://symfony.com/doc/current/security/experimental_authenticators.html
+  enable_authenticator_manager: true
+  password_hashers:
+    App\Entity\Admin\Admin:
+      algorithm: auto
+    App\Entity\User\User:
+      algorithm: auto
+  # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+  providers:
+    # used to reload user from session & other features (e.g. switch_user)
+    chain_provider:
+      chain:
+        providers: [ account_provider, admin_provider ]
+    account_provider:
+      entity:
+        class: "%security.account.entity%"
+    admin_provider:
+      entity:
+        class: "%security.admin.entity%"
+    # used to reload user from session & other features (e.g. switch_user)
+    # used to reload user from session & other features (e.g. switch_user)
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+
+    api-login:
+      pattern: ^/api/user/login
+      stateless: true
+    api:
+      pattern: ^/api
+      entry_point: jwt
+      stateless: true
+      provider: account_provider
+      json_login:
+        check_path: /api/user/login
+        success_handler: lexik_jwt_authentication.handler.authentication_success
+        failure_handler: lexik_jwt_authentication.handler.authentication_failure
+      jwt: ~
+      refresh_jwt:
+        check_path: /api/token/refresh
+
+  access_control:
+    #api
+    - { path: ^/api/user/login, roles: PUBLIC_ACCESS }
+    - { path: ^/api/user/registration, roles: PUBLIC_ACCESS }
+    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/account, roles: IS_AUTHENTICATED_FULLY }

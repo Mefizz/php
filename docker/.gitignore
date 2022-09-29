@@ -1,0 +1,7 @@
+/logs/nginx/*
+/log/php-fpm/*
+init-letsencrypt.sh
+init-letsecnrypt.sh
+data
+data/*
+/.env

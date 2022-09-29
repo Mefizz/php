@@ -1,0 +1,9 @@
+gesdinet_jwt_refresh_token:
+    single_use: true
+    refresh_token_class: App\Entity\Token\Refresh\RefreshToken
+    user_provider: security.user.provider.concrete.chain_provider
+    user_identity_field: email.value
+    token_parameter_name: refresh_token
+    ttl: 31536000 # 365 days
+    cookie:
+      enabled: false

@@ -1,0 +1,7 @@
+parameters:
+  slack_token: '%env(SLACK_TOKEN)%'
+  slack_bot_name: '@@application_logs'
+  slack_channel: '#application_logs'
+
+monolog:
+  channels: ['application_logs'] # Change the channel name with your own one
