@@ -12,7 +12,7 @@ class Kernel extends BaseKernel
 {
     /**
      * @OA\Info(title="CRM doc", version="1.0.0")
-     * @OA\Server(description="Local", url="http://crm.loc")
+     * @OA\Server(description="Local", url="http://test.loc")
      * @OA\OpenApi(security={{"bearerAuth": {}}})
      * @OA\Components(@OA\SecurityScheme(securityScheme="bearerAuth", type="http",scheme="bearer"))
      */

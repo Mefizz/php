@@ -1,8 +1,4 @@
-# Sample GitLab Project
+1. rename .env.example into .env files on backed/docker folders
+2. make local-build
+go to http://test_task.loc/doc or use test.postman_collection.json(in root folder) for Postman import
 
-This sample project shows how a project in GitLab looks for demonstration purposes. It contains issues, merge requests and Markdown files in many branches,
-named and filled with lorem ipsum.
-
-You can look around to get an idea how to structure your project and, when done, you can safely delete this project.
-
-[Learn more about creating GitLab projects.](https://docs.gitlab.com/ee/gitlab-basics/create-project.html)
