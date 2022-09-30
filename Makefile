@@ -4,7 +4,7 @@ EXEC_PHP       = $(DOCKER_COMPOSE) exec php-fpm
 DOCKER_COMPOSE_FILE = -f docker-compose.yml
 
 
-local-build: local-compose-file dc-build init-local
+local-build: dc-build init-local
 dev-build: dc-build init-dev
 init-local: dc-down dc-up composer-i migrate jwt-ssl-key-generate swagger-generate clear-cache
 init-dev: dc-down dc-up composer-i jwt-ssl-key-generate clear-cache
